@@ -162,110 +162,115 @@ const ProductPage = () => {
 
     return (
         <div className="container mx-auto p-5">
-            <div className='flex justify-between items-center py-2'>
-                <div className='cursor-pointer'>BookBot</div>
-                <div className='flex items-center space-x-2'>
-                    <ModeToggle />
-                    <FaShoppingCart onClick={handleRedirectCart} className='mr-4 cursor-pointer' />
-                    <p>{user?.email}</p>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <IoIosLogOut
-                                    onClick={handleSignOut}
-                                    className="dark:text-white rounded-full h-6 w-6 ml-4" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Sign Out</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
-            </div>
+    {/* Top Navigation Bar */}
+    <div className='flex flex-col md:flex-row justify-between items-center py-2'>
+        <div className='cursor-pointer text-xl font-bold'>BookBot</div>
+        <div className='flex items-center space-x-2 mt-2 md:mt-0'>
+            <ModeToggle />
+            <FaShoppingCart onClick={handleRedirectCart} className='mr-4 cursor-pointer' />
+            <p className="hidden md:block">{user?.email}</p>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <IoIosLogOut
+                            onClick={handleSignOut}
+                            className="dark:text-white rounded-full h-6 w-6 ml-4" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Sign Out</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        </div>
+    </div>
 
-            {/* Search Input */}
-            <div className="mb-5">
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    placeholder="Search books..."
-                    className="border light:border-gray-300 dark:border-gray-700 light:text-black rounded-lg p-2 w-full"
-                />
-            </div>
+    {/* Search Input */}
+    <div className="mb-5">
+        <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search books..."
+            className="border light:border-gray-300 dark:border-gray-700 light:text-black rounded-lg p-2 w-full"
+        />
+    </div>
 
-            {selectedProduct ? (
-                // Display selected product details
-                <div className="mt-10 flex flex-col md:flex-row py-10 md:py-5 border rounded-lg shadow-lg light:shadow-black bg-transparent relative">
-                    <img
-                        src={selectedProduct.imageLink}
-                        alt={selectedProduct.title}
-                        className="md:h-96 mx-5 object-cover"
-                    />
-                    <div className="flex-grow mx-5 md:mx-0 my-5 light:text-gray-700 dark:text-gray-100">
-                        <h2 className="text-2xl font-bold">{selectedProduct.title}</h2>
-                        <p className="">Written by: {selectedProduct.author}</p>
-                        <p className="">Published in the year {selectedProduct.year} | Language: {selectedProduct.language}</p>
-                        <p className="">This book has {selectedProduct.pages} pages</p>
+    {selectedProduct ? (
+        // Display selected product details
+        <div className="mt-10 flex flex-col md:flex-row py-10 md:py-5 border rounded-lg shadow-lg light:shadow-black bg-transparent relative">
+            <img
+                src={selectedProduct.imageLink}
+                alt={selectedProduct.title}
+                className="md:h-96 mx-5 object-cover"
+            />
+            <div className="flex-grow mx-5 md:mx-0 my-5 light:text-gray-700 dark:text-gray-100">
+                <h2 className="text-2xl font-bold">{selectedProduct.title}</h2>
+                <p>Written by: {selectedProduct.author}</p>
+                <p>Published in the year {selectedProduct.year} | Language: {selectedProduct.language}</p>
+                <p>This book has {selectedProduct.pages} pages</p>
 
-                        <div className='flex'>
-                            <p className='mt-5 mr-2 border light:text-black py-2 px-4 rounded transition'>${selectedProduct.price}</p>
-                            <button
-                                onClick={() => handleAddToCart(selectedProduct.id)}
-                                className="mt-5 bg-black text-white py-2 px-4 rounded hover:bg-gray-600 transition"
-                            >
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Close Icon */}
+                <div className='flex'>
+                    <p className='mt-5 mr-2 border light:text-black py-2 px-4 rounded transition'>${selectedProduct.price}</p>
                     <button
-                        onClick={handleResetSelection}
-                        className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 transition"
+                        onClick={() => handleAddToCart(selectedProduct.id)}
+                        className="mt-5 bg-black text-white py-2 px-4 rounded hover:bg-gray-600 transition"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        Add to Cart
                     </button>
                 </div>
+            </div>
 
-            ) : (
-                // Display list of filtered products
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    {filteredProducts.map(product => (
-                        <li
-                            className="border light:border-gray-300 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
-                            key={product.id}
-                        >
-                            <button onClick={() => handleSelectProduct(product.id)} className="w-full py-4 md:py-1 flex md:flex-col justify-between">
-                                <img
-                                    src={product.imageLink}
-                                    alt={product.title}
-                                    className="w-40 md:w-full h-56 object-cover px-2 md:px-10"
-                                />
-                                <div className='flex justify-between items-center'>
-                                <div className="p-4 text-start bottom-0">
-                                    <h3 className="text-md font-semibold">{product.title}</h3>
-                                    <p className="text-sm text-gray-600 mt-1">{product.author}</p>
-                                    <p className="text-xs text-gray-600 mt-1">${product.price}</p>
-                                </div>
-                                <MdAddShoppingCart />
-                                </div>
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            {/* Pass handleSelectProduct to Chatbot */}
-            <Chatbot
-                onProductSelect={handleSelectProduct}
-                onProductSearch={setSearchQuery}
-                onAddToCart={handleAddToCart}
-            />
-            <Toaster />
+            {/* Close Icon */}
+            <button
+                onClick={handleResetSelection}
+                className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 transition"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
+
+    ) : (
+        // Display list of filtered products
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {filteredProducts.map(product => (
+                <li
+                    className="border light:border-gray-300 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
+                    key={product.id}
+                >
+                    <button onClick={() => handleSelectProduct(product.id)} className="w-full py-4 md:py-1 flex md:flex-col justify-between">
+                        <img
+                            src={product.imageLink}
+                            alt={product.title}
+                            className="w-40 md:w-full h-56 object-cover px-2 md:px-10"
+                        />
+                        <div className='flex justify-between items-center'>
+                            <div className="p-4 text-start bottom-0">
+                                <h3 className="text-md font-semibold">{product.title}</h3>
+                                <p className="text-sm text-gray-600 mt-1">{product.author}</p>
+                                <p className="text-xs text-gray-600 mt-1">${product.price}</p>
+                            </div>
+                            <MdAddShoppingCart />
+                        </div>
+                    </button>
+                </li>
+            ))}
+        </ul>
+    )}
+    <div className="mt-auto"> 
+        {/* Ensure Chatbot is positioned correctly */}
+        <Chatbot
+            onProductSelect={handleSelectProduct}
+            onProductSearch={setSearchQuery}
+            onAddToCart={handleAddToCart}
+        />
+    </div>
+
+    {/* Toaster for notifications */}
+    <Toaster />
+</div>
+
     );
 };
 

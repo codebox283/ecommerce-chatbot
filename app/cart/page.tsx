@@ -107,12 +107,13 @@ const CartPage = () => {
 
     return (
         <div className="container mx-auto p-5">
-            <div className='flex justify-between items-center py-2'>
-                <p onClick={handleRedirectProducts} className='cursor-pointer'>BookBot</p>
-                <div className='flex items-center space-x-2'>
+            {/* Top Navigation Bar */}
+            <div className='flex flex-col md:flex-row justify-between items-center py-2'>
+                <p onClick={handleRedirectProducts} className='cursor-pointer text-xl font-bold'>BookBot</p>
+                <div className='flex items-center space-x-2 mt-2 md:mt-0'>
                     <ModeToggle />
-                    <FaShoppingCart className='mr-4' />
-                    <p>{user?.email}</p>
+                    <FaShoppingCart className='mr-4'/>
+                    <p className="hidden md:block">{user?.email}</p>
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
@@ -128,6 +129,7 @@ const CartPage = () => {
                 </div>
             </div>
 
+            {/* Cart Items */}
             {cartItems.length === 0 ? (
                 <p className="text-center">Your cart is empty.</p>
             ) : (
@@ -136,11 +138,11 @@ const CartPage = () => {
                         {cartItems.map(item => (
                             <li key={item.id} className="flex p-2 items-center justify-between overflow-hidden">
                                 <div className='flex'>
-                                <img src={item.image} alt={item.title} className="w-fit h-20 md:h-40 m-2 object-cover" />
-                                <div className="p-2 md:p-4 text-start">
-                                    <h3 className="md:text-xl font-semibold">{item.title}</h3>
-                                    <p className="text-xs md:text-sm dark:text-gray-400 mt-1">{item.author}</p>
-                                </div>
+                                    <img src={item.image} alt={item.title} className="w-fit h-20 md:h-40 m-2 object-cover" />
+                                    <div className="p-2 md:p-4 text-start">
+                                        <h3 className="md:text-xl font-semibold">{item.title}</h3>
+                                        <p className="text-xs md:text-sm dark:text-gray-400 mt-1">{item.author}</p>
+                                    </div>
                                 </div>
                                 <div className='flex space-x-2'>
                                     <p className="text-3xl mt-2">${item.price}</p>
@@ -154,6 +156,8 @@ const CartPage = () => {
                             </li>
                         ))}
                     </ul>
+
+                    {/* Price Summary */}
                     <div className='flex justify-between my-2 px-10'>
                         <p>Total price:</p>
                         <p>${totalPrice.toFixed(2)}</p>
@@ -166,15 +170,23 @@ const CartPage = () => {
                         <p></p>
                         <p className='text-3xl'>${totalPrice.toFixed(2)}</p>
                     </div>
+
+                    {/* Checkout Button */}
                     <button
                         onClick={handleCheckout}
-                        className="mt-5 w-full light:bg-black light:text-white dark:bg-white dark:text-black py-2 my-2 px-10 rounded hover:light:bg-gray-200 transition"
+                        className="mt-5 w-full bg-black text-white dark:bg-white dark:text-black py-2 my-2 px-10 rounded transition"
                     >
                         Checkout
                     </button>
                 </div>
             )}
-            <Chatbot />
+
+            <div className="mt-auto">
+                {/* Chatbot component */}
+                <Chatbot />
+            </div>
+
+            {/* Toaster for notifications */}
             <Toaster />
         </div>
     );

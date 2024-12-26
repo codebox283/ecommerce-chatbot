@@ -105,13 +105,13 @@ const Chatbot: React.FC<ChatbotProps> = ({ onProductSelect, onProductSearch, onA
             setInputValue(""); // Clear input field after help request
             return;
         }
-        
+
         // Add selected item to cart
         if (lowerCaseInput === 'yes' && productId) {
             handleAddToCart(productId);
         } else if (lowerCaseInput === 'yes' && !productId) {
             setMessages(prev => [...prev, { text: "Please select a book to add to cart", sender: 'bot' }]);
-        }else if (lowerCaseInput === 'no') {
+        } else if (lowerCaseInput === 'no') {
             setMessages(prev => [...prev, { text: "Okay! Let me know if there's anything else you need.", sender: 'bot' }]);
         }
 
@@ -125,15 +125,15 @@ const Chatbot: React.FC<ChatbotProps> = ({ onProductSelect, onProductSearch, onA
                 ...prev,
                 { text: "I cannot do that right now. You have to manually delete a book from the cart. Redirecting to cart...", sender: 'bot' },
             ]);
-        
+
             setTimeout(() => {
                 router.push('/cart');
             }, 3000); // Wait for 3 seconds before redirecting
-        
+
             setInputValue(""); // Clear input field after help request
             return;
         }
-        
+
         // Redirect to cart
         if (
             lowerCaseInput.includes("cart") ||
@@ -146,14 +146,14 @@ const Chatbot: React.FC<ChatbotProps> = ({ onProductSelect, onProductSearch, onA
                 ...prev,
                 { text: "Redirecting to cart...", sender: 'bot' },
             ]);
-        
+
             setTimeout(() => {
                 router.push('/cart');
             }, 3000); // Wait for 3 seconds before redirecting
-        
+
             setInputValue(""); // Clear input field after help request
             return;
-        }        
+        }
 
         // Regular expressions for specific queries
         const authorRegex = /(show\s+)?books\s+(written\s+by|by|from)\s+(.*)/i;
@@ -275,18 +275,18 @@ const Chatbot: React.FC<ChatbotProps> = ({ onProductSelect, onProductSearch, onA
     return (
         <>
             <div
-                className="fixed bottom-5 right-5 bg-transparent light:text-black dark:text-white rounded-full w-16 h-16 p-2 flex items-center justify-center cursor-pointer shadow-lg transition-transform transform hover:scale-125"
+                className="fixed bottom-5 right-5 bg-transparent light:text-black dark:text-white rounded-full w-10 md:w-16 h-10 md:h-16 p-2 flex items-center justify-center cursor-pointer shadow-lg transition-transform transform hover:scale-125"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <IoChatbubbleEllipsesSharp className='w-full h-full' />
             </div>
             {isOpen && (
-                <div className={`fixed bottom-20 right-20 ${isExpanded ? 'w-[1000px] max-h-[600px]' : 'w-96 max-h-[500px]'} backdrop-filter backdrop-blur-sm bg-black bg-opacity-60 border border-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300`}>
+                <div className={`fixed bottom-20 right-5 md:right-20 ${isExpanded ? 'w-[90vw] max-w-[1000px] max-h-[80vh]' : 'w-[90vw] max-w-[400px] max-h-[70vh]'} backdrop-filter backdrop-blur-sm bg-black bg-opacity-60 border border-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300`}>
                     <div className="bg-gray-800 backdrop-filter backdrop-blur-sm bg-opacity-10 text-white p-4 text-lg font-semibold flex justify-between items-center">
                         Chat with AI
                         {/* Size Toggle Button */}
                         <div
-                            className="m-0 -p-2 h-6 w-6 cursor-pointer"
+                            className="m-0 hidden md:block -p-2 h-6 w-6 cursor-pointer"
                             onClick={handleToggleSize}
                         >
                             {!isExpanded ? (
@@ -296,11 +296,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ onProductSelect, onProductSearch, onA
                             )}
                         </div>
                     </div>
-                    <div className="p-4 overflow-y-auto max-h-[300px] scrollbar-hidden space-y-2">
+                    <div className="p-4 overflow-y-auto max-h-[50vh] scrollbar-hidden space-y-2">
                         {messages.map((msg, index) => (
                             <div key={index} className={`my-2 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
                                 <span className={`inline-block space-x-2 p-2 rounded-lg ${msg.sender === 'user' ? 'bg-gray-200 text-black' : 'bg-transparent text-white'}`}>
-                                    {msg.sender === 'user' ? <></> : <IoSparklesSharp className='h-4 w-4 -ml-2 mr-2' />}
+                                    {msg.sender === 'user' ? null : <IoSparklesSharp className='h-4 w-4 -ml-2 mr-2' />}
                                     {msg.text}
                                 </span>
                                 {msg.productId && (
@@ -337,7 +337,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ onProductSelect, onProductSearch, onA
                                 <TbSquareRoundedArrowUpFilled className='h-full w-full transition-colors duration-200 text-white' />
                             )}
                         </div>
-
                     </div>
                 </div>
             )}
