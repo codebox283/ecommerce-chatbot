@@ -16,7 +16,8 @@ import { Toaster, toast } from 'sonner';
 import Chatbot from '@/components/Chatbot';
 
 interface CartItem {
-    id: string;
+    id: number;
+    product_id: number;
     user_id: string;
     title: string;
     author: string;
