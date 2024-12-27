@@ -40,8 +40,9 @@ const AuthPage = () => {
                 router.push('/products');
             }
         } catch (error) {
+            const e = error as Error
             console.error(error);
-            toast(error.message);
+            toast.error(e.message);
         }
     };
 
