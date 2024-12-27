@@ -28,7 +28,7 @@ const ProductPage = () => {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 setUser(user);
-                const response = await fetch('/api/products');
+                const response = await fetch('https://ecommerce-chatbot-backend.onrender.com/api/products');
                 const data = await response.json();
                 if (data.success) {
                     setProducts(data.data);
