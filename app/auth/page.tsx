@@ -27,7 +27,7 @@ const AuthPage = () => {
     const handleAuth = async () => {
         try {
             if (isSignUp) {
-                const { user, error } = await supabase.auth.signUp({ email, password });
+                const { error } = await supabase.auth.signUp({ email, password });
                 if (error) throw error;
 
                 // Optionally insert user details into your database
