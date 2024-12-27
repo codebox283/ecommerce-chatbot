@@ -7,18 +7,13 @@ const VerifyPage = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const verifyEmail = async () => {
-            const { error } = await supabase.auth.verifyEmail();
-            if (error) {
-                console.error('Verification failed:', error.message);
-                alert('Verification failed. Please try again.');
-                return;
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                router.push('/products'); // Redirect to products if user is logged in
             }
-            // Redirect to products page after successful verification
-            router.push('/products');
         };
-
-        verifyEmail();
+        checkUser();
     }, [router]);
 
     return (
@@ -26,6 +21,7 @@ const VerifyPage = () => {
             <div className="text-white text-center">
                 <h1 className="text-3xl font-bold mb-4">Verifying Your Email...</h1>
                 <p>A verification email has been sent to the address you provided. Please check your inbox and click the link to confirm your email address.</p>
+                <p>Then you will be redirected to our main page. Thank you!</p>
             </div>
         </div>
 
