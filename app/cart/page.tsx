@@ -15,12 +15,27 @@ import { MdDelete } from 'react-icons/md';
 import { Toaster, toast } from 'sonner';
 import Chatbot from '@/components/Chatbot';
 
-const CartPage = () => {
-    const [cartItems, setCartItems] = useState([]);
-    const [user, setUser] = useState(null);
+interface CartItem {
+    id: string;
+    user_id: string;
+    title: string;
+    author: string;
+    image: string;
+    price: number;
+    quantity?: number;
+}
+
+interface User {
+    id: string;
+    email?: string;
+}
+
+const CartPage: React.FC = () => {
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
     const pathname = usePathname();
-    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
 
     useEffect(() => {
         const fetchUserAndCartItems = async () => {
@@ -32,15 +47,15 @@ const CartPage = () => {
 
                 // Fetch cart items from Supabase
                 const { data: items, error: fetchError } = await supabase
-                    .from('cart')
+                    .from<CartItem>('cart')
                     .select('*')
-                    .eq('user_id', user.id);
+                    .eq('user_id', user?.id);
 
                 if (fetchError) throw fetchError;
 
-                setCartItems(items);
+                setCartItems(items || []); // Ensure items is an array
             } catch (error) {
-                toast.error(error);
+                toast.error((error as Error).message);
                 console.error("Error fetching user or cart items:", error);
             }
         };
@@ -58,7 +73,7 @@ const CartPage = () => {
         calculateTotalPrice();
     }, [cartItems]);
 
-    const handleRemoveFromCart = async (productId) => {
+    const handleRemoveFromCart = async (productId: string) => {
         try {
             // Remove item from local state
             const updatedCart = cartItems.filter(item => item.id !== productId);
@@ -86,7 +101,7 @@ const CartPage = () => {
             await supabase
                 .from('cart')
                 .delete()
-                .eq('user_id', user.id); // Remove all items for the current user
+                .eq('user_id', user?.id); // Remove all items for the current user
 
             setCartItems([]); // Clear local state
         } catch (error) {
@@ -96,7 +111,7 @@ const CartPage = () => {
 
     const handleRedirectProducts = async () => {
         if (pathname === '/cart') {
-            await router.push('/products'); // Redirect to cart
+            await router.push('/products'); // Redirect to products page
         }
     }
 
